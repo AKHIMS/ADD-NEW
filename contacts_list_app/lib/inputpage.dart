@@ -1,12 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api, unused_import, avoid_print, unused_element, prefer_const_constructors, non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_pplication/database.dart';
 import 'package:my_pplication/dhHelper.dart';
+import 'package:my_pplication/main.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class _InputPageState extends State<InputPage> {
         'discount': double.parse(_discountController.text),
         'finalPrice': double.parse(_finalPriceController.text),
         'imageUrl': _imageUrlController.text,
-        'imageFile': _image,
+        // 'imageFile': _image,
       };
     } catch (e) {
       print('Error parsing inputs: $e');
@@ -64,21 +64,23 @@ class _InputPageState extends State<InputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ADD NEW',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  textAlign: TextAlign.center,),
+        title: Text(
+          'ADD NEW',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            children: newMethod(),
+            children: _buildFormWidgets(),
           ),
         ),
       ),
     );
   }
-
-  List<Widget> newMethod() {
+  List<Widget> _buildFormWidgets() {
     return <Widget>[
       TextFormField(
         controller: _nameController,
@@ -144,38 +146,19 @@ class _InputPageState extends State<InputPage> {
         ),
       ),
       SizedBox(height: 10),
-      SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            if (_validateInputs()) {
-              _saveShoe();
-              Navigator.pop(context, _getShoeDetails());
-              Fluttertoast.showToast(msg: "saved successfully");
-            }
-          },
-          child: Text('save'),
-        ),
+      ElevatedButton(
+        onPressed: () {
+          if (_validateInputs()) {
+            _saveShoe();
+            // Navigator.pop(context, _getShoeDetails());
+            Navigator.push(context, MaterialPageRoute(builder:(context) => ShoePage (), ));
+            Fluttertoast.showToast(msg: "Saved successfully");
+          }
+        },
+        child: Text('Save'),
       ),
     ];
   }
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    try {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-      if (pickedFile != null) {
-        setState(() {
-          _image = File(pickedFile.path);
-          _imageUrlController.text = '';
-        });
-      }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
-  }
-
   bool _validateInputs() {
     setState(() {
       _validateName = _nameController.text.trim().isEmpty;
@@ -185,7 +168,6 @@ class _InputPageState extends State<InputPage> {
       _validateFinalPrice = _finalPriceController.text.trim().isEmpty;
       _validateImageUrl = _imageUrlController.text.trim().isEmpty;
     });
-
     return !_validateName &&
         !_validateDescription &&
         !_validatePrice &&
@@ -193,9 +175,9 @@ class _InputPageState extends State<InputPage> {
         !_validateFinalPrice;
     // !_validateImageUrl;
   }
-
   Future<void> _saveShoe() async {
     try {
+      
       String name = _nameController.text;
       String description = _descriptionController.text;
       double price = double.parse(_priceController.text);
@@ -223,7 +205,6 @@ class _InputPageState extends State<InputPage> {
       print('Error saving shoe: $e');
     }
   }
-
   Future<String> _saveImageToStorage(File imageFile) async {
     // Add your logic to save the image to storage.
     return 'path/to/your/image';

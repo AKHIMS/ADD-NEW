@@ -1,40 +1,40 @@
-// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, avoid_print, use_super_parameters, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace, avoid_print, use_super_parameters, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:my_pplication/database.dart';
 
 class ShoePage2 extends StatefulWidget {
-  const ShoePage2({Key? key, required Shoe shoe}) : super(key: key);
+  const ShoePage2({Key? key, required this.shoe}) : super(key: key);
+
+  final Shoe shoe;
 
   @override
   _ShoePage2State createState() => _ShoePage2State();
 }
 
 class _ShoePage2State extends State<ShoePage2> {
-  final myItems = [
-    Image.asset('images/nike1.png', fit: BoxFit.cover),
-    Image.asset('images/nike2.png', fit: BoxFit.cover),
-    Image.asset('images/nike3.png', fit: BoxFit.cover),
-    Image.asset('images/nike4.png', fit: BoxFit.cover),
-    Image.asset('images/nike5.png', fit: BoxFit.cover),
-  ];
+  late String _imageUrl; // Image URL
   final _color = ['Yellow', 'Black', 'Green', 'Blue', 'Red', 'Gray'];
   final _size = ['38', '39', '40', '41', '42', '43'];
   int myCurrentIndex = 0;
 
-  String _selectedColors = 'Yellow';
+  String _selectedColor = 'Yellow';
   String _selectedSize = '38';
 
   @override
   Widget build(BuildContext context) {
+    _imageUrl = widget.shoe.imageUrl; // Set the image URL from the Shoe object
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Center(
-          child: Text("COMMON PROJECTS",
-              style: TextStyle(color: Colors.black, fontSize: 18),
-              textAlign: TextAlign.center),
+          child: Text(
+            widget.shoe.name,
+            style: TextStyle(color: Colors.black, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
         ),
         backgroundColor: Colors.white,
         leading: Row(
@@ -58,13 +58,15 @@ class _ShoePage2State extends State<ShoePage2> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.checkroom_outlined,
-                color: Colors.black,
-              ))
+            onPressed: () {
+              // Navigate back to the previous screen
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.checkroom_outlined,
+              color: Colors.black,
+            ),
+          ),
         ],
         elevation: 0,
       ),
@@ -85,7 +87,9 @@ class _ShoePage2State extends State<ShoePage2> {
                         });
                       },
                     ),
-                    items: myItems,
+                    items: [
+                      Image.network(_imageUrl, fit: BoxFit.cover),
+                    ],
                   )
                 ],
               ),
@@ -94,20 +98,20 @@ class _ShoePage2State extends State<ShoePage2> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
-                  'COMMON PROJECTS',
+                  widget.shoe.name,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 5),
                 Text(
-                  'Original Achilles Low Sneakers ',
+                  widget.shoe.description,
                   style: TextStyle(fontSize: 15),
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '\$410',
+                  '\$${widget.shoe.finalPrice}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 SizedBox(height: 20),
@@ -145,34 +149,34 @@ class _ShoePage2State extends State<ShoePage2> {
                             height: 50,
                             width: 70,
                             child: DropdownButton<String>(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedColors = value!;
-                                  });
-                                  print(value);
-                                },
-                                value: _selectedColors,
-                                items:
-                                    _color.map<DropdownMenuItem<String>>((e) {
-                                  return DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedColor = value!;
+                                });
+                                print(value);
+                              },
+                              value: _selectedColor,
+                              items: _color.map<DropdownMenuItem<String>>((e) {
+                                return DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: TextStyle(
+                                      color: Colors.black,
                                     ),
-                                  );
-                                }).toList(),
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                underline: Container(
-                                  height: 0,
-                                ),
-                                isExpanded: true,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                itemHeight: 50),
+                                  ),
+                                );
+                              }).toList(),
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              underline: Container(
+                                height: 0,
+                              ),
+                              isExpanded: true,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              itemHeight: 50,
+                            ),
                           ),
                         ],
                       ),
@@ -207,33 +211,34 @@ class _ShoePage2State extends State<ShoePage2> {
                             height: 50,
                             width: 50,
                             child: DropdownButton<String>(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedSize = value!;
-                                  });
-                                  print(value);
-                                },
-                                value: _selectedSize,
-                                items: _size.map<DropdownMenuItem<String>>((e) {
-                                  return DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(
-                                      e,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedSize = value!;
+                                });
+                                print(value);
+                              },
+                              value: _selectedSize,
+                              items: _size.map<DropdownMenuItem<String>>((e) {
+                                return DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style: TextStyle(
+                                      color: Colors.black,
                                     ),
-                                  );
-                                }).toList(),
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                underline: Container(
-                                  height: 0,
-                                ),
-                                isExpanded: true,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                itemHeight: 50),
+                                  ),
+                                );
+                              }).toList(),
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              underline: Container(
+                                height: 0,
+                              ),
+                              isExpanded: true,
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                              itemHeight: 50,
+                            ),
                           ),
                         ],
                       ),
@@ -251,7 +256,7 @@ class _ShoePage2State extends State<ShoePage2> {
                 child: Transform.translate(
                   offset: Offset(0, 0),
                   child: Text(
-                    "ADD TO CART   \$410",
+                    "ADD TO CART   \$${widget.shoe.finalPrice}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -264,14 +269,14 @@ class _ShoePage2State extends State<ShoePage2> {
             ),
             SizedBox(height: 30),
             Column(
-              children: const [
+              children: [
                 Text(
                   "DESCRIPTION",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Common Projects leather sneakers have gained cult status thanks to their minimalist design and superior construction. This white version is perfect for creating crisp city-smart looks",
+                  widget.shoe.description,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 13, height: 1.8, fontWeight: FontWeight.bold),
@@ -282,16 +287,14 @@ class _ShoePage2State extends State<ShoePage2> {
             Divider(height: 5, thickness: 2),
             SizedBox(height: 20),
             Column(
-              children: const [
-                Text("SIZE & FIT",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+              children: [
+                Text("SIZE & FIT", style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: 20),
                 Divider(height: 5, thickness: 2),
                 SizedBox(height: 20),
-                Text("DETAILS & CARE",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("DETAILS & CARE", style: TextStyle(fontWeight: FontWeight.bold)),
               ],
-            )
+            ),
           ],
         ),
       ),

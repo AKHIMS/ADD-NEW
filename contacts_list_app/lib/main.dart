@@ -36,6 +36,7 @@ class _ShoePageState extends State<ShoePage> {
 
   Future<void> fetchShoes() async {
     try {
+      // Using the DatabaseHelper singleton to fetch shoes
       DatabaseHelper databaseHelper = DatabaseHelper();
       List<Shoe> fetchedShoes = await databaseHelper.getShoes();
       setState(() {
@@ -83,6 +84,7 @@ class _ShoePageState extends State<ShoePage> {
         actions: [
           IconButton(
             onPressed: () async {
+              // Navigating to the InputPage
               await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => InputPage()),
@@ -147,6 +149,7 @@ class _ShoePageState extends State<ShoePage> {
                         width: 98,
                         child: DropdownButton<String>(
                           onChanged: (value) {
+                            // Updating the selected value and triggering a rebuild
                             setState(() {
                               _selectedValue = value!;
                             });
@@ -196,6 +199,7 @@ class _ShoePageState extends State<ShoePage> {
 
                 return InkWell(
                   onTap: () {
+                    // Navigating to ShoePage2 with the selected shoe
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -271,57 +275,61 @@ class ShoeCard extends StatelessWidget {
       ],
     );
   }
-Widget _buildShoeImage() {
-  if (currentShoe.imageUrl != null && currentShoe.imageUrl.isNotEmpty) {
-    if (currentShoe.imageUrl.startsWith('http') ||
-        currentShoe.imageUrl.startsWith('https')) {
-      return Image.network(
-        currentShoe.imageUrl,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          print('Error loading image: $error');
-          return Container(
-            color: Colors.grey,
-            child: Center(
-              child: Icon(
-                Icons.error,
-                color: Colors.red,
+
+  // Widget to build the shoe image based on the imageUrl
+  Widget _buildShoeImage() {
+    if (currentShoe.imageUrl != null && currentShoe.imageUrl.isNotEmpty) {
+      if (currentShoe.imageUrl.startsWith('http') ||
+          currentShoe.imageUrl.startsWith('https')) {
+        // If the imageUrl is a valid HTTP/HTTPS link, load the image from the network
+        return Image.network(
+          currentShoe.imageUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // Handling errors while loading the image
+            print('Error loading image: $error');
+            return Container(
+              color: Colors.grey,
+              child: Center(
+                child: Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
               ),
-            ),
-          );
-        },
-      );
-    } else if (currentShoe.imageUrl.startsWith('google:')) {
-      // Handle Google image URL
-      // Replace 'google:' with the actual logic to load Google images
-      String googleImageUrl = currentShoe.imageUrl.replaceFirst('google:', '');
-      // Example: Replace 'google:' with the actual logic to load Google images
-      return Image.network(
-        'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          print('Error loading Google image: $error');
-          return Container(
-            color: Colors.grey,
-            child: Center(
-              child: Icon(
-                Icons.error,
-                color: Colors.red,
+            );
+          },
+        );
+      } else if (currentShoe.imageUrl.startsWith('google:')) {
+        // If the imageUrl starts with 'google:', use a default Google logo
+        String googleImageUrl = currentShoe.imageUrl.replaceFirst('google:','');
+        return Image.network(
+          'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // Handling errors while loading the Google image
+            print('Error loading Google image: $error');
+            return Container(
+              color: Colors.grey,
+              child: Center(
+                child: Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
               ),
-            ),
-          );
-        },
-      );
-    } else {
-      print('Invalid image URL: ${currentShoe.imageUrl}');
+            );
+          },
+        );
+      } else {
+        // Handling invalid image URLs
+        print('Invalid image URL: ${currentShoe.imageUrl}');
+      }
     }
+
+    // Placeholder for cases where the imageUrl is null or empty
+    return Placeholder(
+      color: Colors.grey,
+    );
   }
-
-  return Placeholder(
-    color: Colors.grey,
-  );
-}
-
 }
 
 void main() {

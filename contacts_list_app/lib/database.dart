@@ -1,3 +1,5 @@
+
+
 class Shoe {
   String id;
   String name;
@@ -7,6 +9,7 @@ class Shoe {
   double finalPrice;
   String imageUrl;
 
+  // Constructor for creating a Shoe instance
   Shoe({
     required this.id,
     required this.name,
@@ -17,6 +20,7 @@ class Shoe {
     required this.imageUrl,
   });
 
+  // Method to convert the Shoe object to a Map
   Map<String, dynamic> toMap() {
     return {
       'shoe_id': id,
@@ -29,15 +33,17 @@ class Shoe {
     };
   }
 
+  // Factory method to create a Shoe object from a Map
   factory Shoe.fromMap(Map<String, dynamic> map) {
     return Shoe(
-      id: map['shoe_id'].toString(), // Corrected to 'shoe_id'
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      price: map['price'] ?? 0.0,
-      discount: map['discount'] ?? 0.0,
-      finalPrice: map['final_price'] ?? 0.0,
-      imageUrl: map['imageUrl'] ?? '',
+      // Extracting values from the map and providing default values if necessary
+      id: map['shoe_id'].toString(), // Converting to string, assuming 'shoe_id' is a String
+      name: map['name'] ?? '',        // Using empty string as a default for 'name'
+      description: map['description'] ?? '', // Using empty string as a default for 'description'
+      price: map['price'] ?? 0.0,      // Using 0.0 as a default for 'price'
+      discount: map['discount'] ?? 0.0, // Using 0.0 as a default for 'discount'
+      finalPrice: map['final_price'] ?? 0.0, // Using 0.0 as a default for 'final_price'
+      imageUrl: map['imageUrl'] ?? '', // Using empty string as a default for 'imageUrl'
     );
   }
 }
