@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_pplication/database.dart';
-import 'package:my_pplication/details_page.dart';
-import 'package:my_pplication/dhHelper.dart';
-import 'package:my_pplication/inputpage.dart';
+import 'package:my_pplication/model/database.dart';
+import 'package:my_pplication/screen/details_page.dart';
+import 'package:my_pplication/model/dhHelper.dart';
+import 'package:my_pplication/screen/inputpage.dart';
 
 class ShoePage extends StatefulWidget {
   const ShoePage({Key? key}) : super(key: key);

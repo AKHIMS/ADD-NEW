@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:my_pplication/database.dart';
+import 'package:my_pplication/model/database.dart';
 
 class ShoePage2 extends StatefulWidget {
   const ShoePage2({Key? key, required this.shoe}) : super(key: key);

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_pplication/database.dart';
-import 'package:my_pplication/dhHelper.dart';
+import 'package:my_pplication/model/database.dart';
+import 'package:my_pplication/model/dhHelper.dart';
 import 'package:my_pplication/main.dart';
 
 class InputPage extends StatefulWidget {
@@ -80,6 +80,7 @@ class _InputPageState extends State<InputPage> {
       ),
     );
   }
+
   List<Widget> _buildFormWidgets() {
     return <Widget>[
       TextFormField(
@@ -150,8 +151,14 @@ class _InputPageState extends State<InputPage> {
         onPressed: () {
           if (_validateInputs()) {
             _saveShoe();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShoePage(),
+                ),
+                (route) => false);
             // Navigator.pop(context, _getShoeDetails());
-            Navigator.push(context, MaterialPageRoute(builder:(context) => ShoePage (), ));
+
             Fluttertoast.showToast(msg: "Saved successfully");
           }
         },
@@ -159,6 +166,7 @@ class _InputPageState extends State<InputPage> {
       ),
     ];
   }
+
   bool _validateInputs() {
     setState(() {
       _validateName = _nameController.text.trim().isEmpty;
@@ -175,9 +183,9 @@ class _InputPageState extends State<InputPage> {
         !_validateFinalPrice;
     // !_validateImageUrl;
   }
+
   Future<void> _saveShoe() async {
     try {
-      
       String name = _nameController.text;
       String description = _descriptionController.text;
       double price = double.parse(_priceController.text);
@@ -205,6 +213,7 @@ class _InputPageState extends State<InputPage> {
       print('Error saving shoe: $e');
     }
   }
+
   Future<String> _saveImageToStorage(File imageFile) async {
     // Add your logic to save the image to storage.
     return 'path/to/your/image';

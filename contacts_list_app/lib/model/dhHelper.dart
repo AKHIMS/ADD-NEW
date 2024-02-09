@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 // Importing necessary packages
-import 'package:my_pplication/database.dart';
+import 'package:my_pplication/model/database.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
